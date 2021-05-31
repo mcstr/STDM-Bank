@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class Kunde {
-    private int kundenNummer;
+    private String kundenNummer;
     private String name;
     private String addresse;
     private LocalDate kundenSeit;
     private ArrayList<Konto> myKonten;
 
-    public Kunde(int kundenNummer, String name, String addresse, LocalDate kundenSeit, ArrayList<Konto> myKonten) {
+    public Kunde(String kundenNummer, String name, String addresse, LocalDate kundenSeit, ArrayList<Konto> myKonten) {
         this.kundenNummer = kundenNummer;
         this.name = name;
         this.addresse = addresse;
@@ -30,18 +30,20 @@ public class Kunde {
     }
 
     public void printKontoInfo() {
-        this.myKonten.forEach((konto) -> {
+        String inhaber = String.format("Kontoinhaber: %s", this.name);
+        System.out.println(inhaber);
+        for (Konto konto : this.myKonten) {
             String message = String.format(Locale.GERMANY,
-                    "Kontoinhaber: %s \r\n     Kto-Nr.: %s, \r\n     BLZ: %s, %s, \r\n     Kontostand: %,.2f Euro\r\n",
-                    konto.myKunde.getName(), konto.kontoNummer, Bank.blz, Bank.institutsName, konto.kontoStand);
+                    "     Kto-Nr.: %s, \r\n     BLZ: %s, %s, \r\n     Kontostand: %,1.2f Euro\r\n",
+                    konto.kontoNummer, Bank.blz, Bank.institutsName, konto.kontoStand);
             System.out.println(message);
-        });
+        };
     }
 
     public void printKundeKontostand() {
-        this.myKonten.forEach((konto) -> {
+        for (Konto konto : this.myKonten) {
             String message = String.format(Locale.GERMANY,
-                    "Kontoauszug \r\n     Kto-Nr.: %s, \r\n     BLZ: %s, %s, \r\n     Kontostand: %,.2f Euro \r\n     Kontoinhaber: %s \r\n",
+                    "Kontoauszug \r\n     Kto-Nr.: %s, \r\n     BLZ: %s, %s, \r\n     Kontostand: %,9.2f Euro \r\n     Kontoinhaber: %s\r\n",
                     konto.kontoNummer, Bank.blz, Bank.institutsName, konto.kontoStand, konto.myKunde.getName());
             System.out.println(message);
 
@@ -52,15 +54,16 @@ public class Kunde {
                 String type = beweg.getDescription();
                 System.out.println(i + 1 + "  " + datum + "     " + betrag + "     " + type);
             }
+            System.out.println("\r\n");
 
-        });
+        };
     }
 
-    public int getKundenNummer() {
+    public String getKundenNummer() {
         return this.kundenNummer;
     }
 
-    public void setKundenNummer(int kundenNummer) {
+    public void setKundenNummer(String kundenNummer) {
         this.kundenNummer = kundenNummer;
     }
 

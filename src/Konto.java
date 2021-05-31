@@ -23,7 +23,7 @@ abstract class Konto {
         Bank.addKonto(this);
     }
 
-    public void eroeffnen(Kunde kunde, double betrag) {
+    protected void eroeffnen(Kunde kunde, double betrag) {
         if (this.myKunde != null) {
             String message = "Konto schon vorhanden \r\n";
             System.err.print(message);
@@ -35,39 +35,61 @@ abstract class Konto {
 
     }
 
-    public void einzahlen(double betrag, LocalDate datum) {
-        if (this.myBewegungen == null) {
-            this.addKontoBewegung(betrag, datum, "Ersteinzahlung");
-        } else {
-            this.addKontoBewegung(betrag, datum, "Einzahlung");
-        }
-
+    protected void einzahlen(double betrag, LocalDate datum) {
         double newkontoStand = this.kontoStand + betrag;
         this.kontoStand = newkontoStand;
+        if (this.myBewegungen == null) {
+            this.addKontoBewegung(betrag, datum, "Ersteinzahlung", this.kontoStand);
+        } else {
+            this.addKontoBewegung(betrag, datum, "Einzahlung", this.kontoStand);
+        }
+
+
     }
 
-    public void abheben(double betrag, LocalDate datum) {
-        this.kontoStand -= betrag;
-        this.addKontoBewegung(betrag, datum, "Auszalung");
+    protected void abheben(double betrag, LocalDate datum) {
+        double newkontoStand = this.kontoStand - betrag;
+        this.kontoStand = newkontoStand;
+        this.addKontoBewegung(-(betrag), datum, "Auszalung", this.kontoStand);
     }
 
-    public void addKontoBewegung(double betrag, LocalDate datum, String description) {
+    protected void addZinsen(double betrag, LocalDate datum) {
+        double newkontoStand = this.kontoStand + betrag;
+        this.kontoStand = newkontoStand;
+        this.addKontoBewegung(betrag, datum, "Zinsen", this.kontoStand);
+    }
+
+    protected void addKontoBewegung(double betrag, LocalDate datum, String description, double kontoStand) {
         if (this.myBewegungen == null) {
             this.myBewegungen = new ArrayList<Kontobewegung>();
         }
 
-        Kontobewegung newKontobewegung = new Kontobewegung(betrag, datum, description, this);
+        Kontobewegung newKontobewegung = new Kontobewegung(betrag, datum, description, this, kontoStand);
         this.myBewegungen.add(newKontobewegung);
     }
 
-    public void printKontoInfo() {
+    protected void printKontoInfo() {
         String message = String.format(Locale.GERMANY,
                 "Kontoinhaber: %s \r\n     Kto-Nr.: %s, \r\n     BLZ: %s, %s \r\n     Kontostand: %,.2f Euro\r\n",
                 this.myKunde.getName(), this.kontoNummer, Bank.blz, Bank.institutsName, this.kontoStand);
         System.out.println(message);
     }
 
-    public void print
+    protected void printKontoStand() {
+        String message = String.format(Locale.GERMANY,
+                "Kontoauszug \r\n     Kto-Nr.: %s, \r\n     BLZ: %s, %s, \r\n     Kontostand: %,9.2f Euro \r\n     Kontoinhaber: %s\r\n",
+                this.kontoNummer, Bank.blz, Bank.institutsName, this.kontoStand, this.myKunde.getName());
+        System.out.println(message);
 
-    public abstract void zinsenBerechnen();
+        for (int i = 0; i < this.myBewegungen.size(); ++i) {
+            Kontobewegung beweg = (Kontobewegung) this.myBewegungen.get(i);
+            String betrag = String.format(Locale.GERMANY, "%,9.2f Euro ", beweg.getBetrag());
+            String datum = Main.format(beweg.getDatum());
+            String type = beweg.getDescription();
+            System.out.println(i + 1 + "  " + datum + "     " + betrag + "     " + type);
+        }
+        System.out.println("\r\n");
+    }
+
+    protected abstract void zinsenBerechnen(LocalDate datum);
 }

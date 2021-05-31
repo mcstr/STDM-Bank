@@ -4,13 +4,23 @@ public class Kontobewegung {
     private double betrag;
     private LocalDate datum;
     private Konto myKonto;
+    private double kontoStand;
     private String description;
 
-    public Kontobewegung(double betrag, LocalDate datum, String description, Konto myKonto) {
+    public Kontobewegung(double betrag, LocalDate datum, String description, Konto myKonto, double kontoStand) {
         this.betrag = betrag;
         this.datum = datum;
         this.description = description;
         this.myKonto = myKonto;
+        this.kontoStand = kontoStand;
+    }
+
+    public double getKontoStand() {
+        return kontoStand;
+    }
+
+    public void setKontoStand(double kontoStand) {
+        this.kontoStand = kontoStand;
     }
 
     public String getDescription() {
