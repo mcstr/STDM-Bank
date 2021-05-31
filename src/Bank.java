@@ -7,8 +7,16 @@ public class Bank {
 
     static String blz = "500 401 50";
     static String institutsName = "Sparkasse Münster";
-    public static ArrayList<Kunde> myKunden = new ArrayList<Kunde>();
-    public static ArrayList<Konto> myKonten = new ArrayList<Konto>();
+    private  static ArrayList<Kunde> myKunden = new ArrayList<Kunde>();
+    private  static ArrayList<Konto> myKonten = new ArrayList<Konto>();
+
+    public static ArrayList<Kunde> getKunden() {
+        return myKunden;
+    }
+
+    public static ArrayList<Konto> getKonten() {
+        return myKonten;
+    }
 
 
     public static Kunde getKunde(String kundenNummer) {
@@ -22,6 +30,7 @@ public class Bank {
         }
         return foundKunde;
     }
+
 
     public static Konto getKonto(String kontoNummer) {
 

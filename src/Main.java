@@ -40,7 +40,7 @@ public class Main {
 
 
         // Ausgabe
-        for (Kunde kunde : Bank.myKunden) {
+        for (Kunde kunde : Bank.getKunden()) {
             kunde.printKontoInfo();
         }
 
