@@ -21,6 +21,7 @@ public class Main {
         Girokonto giro1 = new Girokonto("50060080", 1.5D, 0.0D, null, null, 7.5D, 3000.0D, LocalDate.of(2021, 2, 10));
         giro1.eroeffnen(kunde1, 1.0D);
         giro1.abheben(8500.0D, LocalDate.of(2021, 2, 11));
+        // giro1.einzahlen(8500.0D, LocalDate.of(2021, 2, 11));
         giro1.zinsenBerechnen(LocalDate.of(2021, 4, 01));
         giro1.zinsenBerechnen(LocalDate.of(2021, 7, 01));
         giro1.zinsenBerechnen(LocalDate.of(2021, 10, 01));
@@ -32,6 +33,7 @@ public class Main {
         Girokonto giro2 = new Girokonto("50060090", 1.5D, 0.0D,null, null, 7.5D, 2000.0D, LocalDate.of(2021, 1, 2));
         giro2.eroeffnen(kunde2, 1.0D);
         giro2.abheben(100.5D, LocalDate.of(2021, 2, 11));
+        // giro2.einzahlen(10000.5D, LocalDate.of(2021, 2, 11));
         giro2.abheben(50, LocalDate.of(2021, 2, 11));
         giro2.zinsenBerechnen(LocalDate.of(2021, 4, 01));
         giro2.zinsenBerechnen(LocalDate.of(2021, 7, 01));
