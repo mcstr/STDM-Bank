@@ -6,40 +6,30 @@ public class Sparkonto extends Konto {
     private char art;
 
     public Sparkonto(String kontoNummer, double habenZins, double kontoStand, Kunde myKunde,
-            ArrayList<Kontobewegung> myBewegungen, char art, LocalDate kontoeroeffnung) {
-        super(kontoNummer, habenZins, kontoStand, myKunde, myBewegungen, kontoeroeffnung);
+            ArrayList<Kontobewegung> myBewegungen, char art, LocalDate kontoeroeffnung, double zinsenSumme) {
+        super(kontoNummer, habenZins, kontoStand, myKunde, myBewegungen, kontoeroeffnung, zinsenSumme);
         this.art = art;
     }
 
     public void zinsenBerechnen(LocalDate datum) {
-        double kontoStand = 0;
-        double habenZinsenPercent = this.habenZins / 100;
-        double habenZinsen = 0;
-
-        for (int i = 0; i < this.myBewegungen.size(); i++) {
-            Kontobewegung bewegung = this.myBewegungen.get(i);
-            // Avoid trying to reach outside the ArrayList length
-            Kontobewegung bewegung2 = i < this.myBewegungen.size() - 1 ? this.myBewegungen.get(i + 1) : null;;
-
-
-            if (bewegung2 != null) {
-                kontoStand = bewegung.getKontoStand();
-                LocalDate datum1 = bewegung.getDatum();
-                LocalDate datum2 = bewegung2.getDatum();
-                long daysBetween = ChronoUnit.DAYS.between(datum1, datum2);
-                double result = kontoStand * habenZinsenPercent * daysBetween / 365;
-                habenZinsen += result;
-            } else {
-                kontoStand = bewegung.getKontoStand();
-                LocalDate datum1 = bewegung.getDatum();
-                long daysBetween = ChronoUnit.DAYS.between(datum1, datum);
-                double result = kontoStand * habenZinsenPercent * daysBetween / 365;
-                habenZinsen += result;
-            }
-        }
-        addZinsen(habenZinsen, datum);
+        updateZinsen(datum);
+        addZinsen(this.zinsenSumme, datum);
     }
 
+    protected void updateZinsen(LocalDate datum) {
+        if (datum.getMonthValue() == 1 || datum.getMonthValue() == 4 || datum.getMonthValue() == 7
+                || datum.getMonthValue() == 10 || datum.getMonthValue() == 12) {
+            this.zinsenSumme = 0;
+        }
+        double kontoStand = this.kontoStand;
+        Kontobewegung lastKontobewegung = (this.myBewegungen.size() != 0)
+                ? this.myBewegungen.get(this.myBewegungen.size() - 1)
+                : null;
+        LocalDate lastDatum = lastKontobewegung.getDatum();
+        long daysBetween = ChronoUnit.DAYS.between(lastDatum, datum);
+        if (kontoStand > 0) {
+            this.zinsenSumme += kontoStand * daysBetween / 365 * this.habenZins;}
+    }
     public char getArt() {
         return this.art;
     }

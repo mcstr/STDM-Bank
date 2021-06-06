@@ -11,15 +11,17 @@ abstract class Konto {
     protected Kunde myKunde;
     protected ArrayList<Kontobewegung> myBewegungen;
     protected LocalDate kontoeroeffnung;
+    protected double zinsenSumme;
 
     public Konto(String kontoNummer, double habenZins, double kontoStand, Kunde myKunde,
-            ArrayList<Kontobewegung> myBewegungen, LocalDate kontoeroeffnung) {
-        this.habenZins = habenZins;
+            ArrayList<Kontobewegung> myBewegungen, LocalDate kontoeroeffnung, double zinsenSumme) {
+        this.habenZins = habenZins/100;
         this.kontoNummer = kontoNummer;
         this.kontoStand = kontoStand;
         this.myBewegungen = myBewegungen;
         this.myKunde = myKunde;
         this.kontoeroeffnung = kontoeroeffnung;
+        this.zinsenSumme = zinsenSumme;
         Bank.addKonto(this);
     }
 
@@ -63,7 +65,6 @@ abstract class Konto {
         if (this.myBewegungen == null) {
             this.myBewegungen = new ArrayList<Kontobewegung>();
         }
-
         Kontobewegung newKontobewegung = new Kontobewegung(betrag, datum, description, this, kontoStand);
         this.myBewegungen.add(newKontobewegung);
     }
