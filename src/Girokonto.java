@@ -37,7 +37,7 @@ public class Girokonto extends Konto {
     }
 
     protected void updateZinsen (LocalDate datum) {
-        if (datum.getMonthValue() == 1 || datum.getMonthValue() == 4 || datum.getMonthValue() == 7 || datum.getMonthValue() == 10 || datum.getMonthValue() == 12) {
+        if (datum.getMonthValue() == 1 || datum.getMonthValue() == 4 || datum.getMonthValue() == 7 || datum.getMonthValue() == 10) {
             this.zinsenSumme = 0;
         }
         double kontoStand = this.kontoStand;
